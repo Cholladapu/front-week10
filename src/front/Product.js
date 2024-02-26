@@ -9,6 +9,7 @@ export default function Product() {
         name: "",
         price: ""
     });
+    const [editingProduct, setEditingProduct] = useState(null);
 
     useEffect(() => {
         fetchProducts();
@@ -26,17 +27,39 @@ export default function Product() {
     };
 
     const handleAddProduct = () => {
-        axios.post('http://localhost:5000/products', newProduct)
-            .then(() => {
-                setNewProduct({
-                    _id: "",
-                    img: "",
-                    name: "",
-                    price: ""
-                });
-                fetchProducts();
-            })
-            .catch(error => console.error('Error adding product:', error));
+        if (editingProduct) {
+            // If editing, send a PUT request
+            axios.put(`http://localhost:5000/products/${editingProduct._id}`, newProduct)
+                .then(() => {
+                    setEditingProduct(null);
+                    setNewProduct({
+                        _id: "",
+                        img: "",
+                        name: "",
+                        price: ""
+                    });
+                    fetchProducts();
+                })
+                .catch(error => console.error('Error updating product:', error));
+        } else {
+            // If not editing, send a POST request
+            axios.post('http://localhost:5000/products', newProduct)
+                .then(() => {
+                    setNewProduct({
+                        _id: "",
+                        img: "",
+                        name: "",
+                        price: ""
+                    });
+                    fetchProducts();
+                })
+                .catch(error => console.error('Error adding product:', error));
+        }
+    };
+
+    const handleEditProduct = (product) => {
+        setEditingProduct(product);
+        setNewProduct(product);
     };
 
     const handleDeleteProduct = (productId) => {
@@ -49,7 +72,7 @@ export default function Product() {
 
     return (
         <div>
-            <h2>Add New Product</h2>
+            <h2>{editingProduct ? 'Edit Product' : 'Add New Product'}</h2>
             <form>
                 <label>ID:</label>
                 <input type="text" name="_id" value={newProduct._id} onChange={handleInputChange} />
@@ -63,7 +86,9 @@ export default function Product() {
                 <label>Price:</label>
                 <input type="text" name="price" value={newProduct.price} onChange={handleInputChange} />
 
-                <button type="button" onClick={handleAddProduct}>Add Product</button>
+                <button type="button" onClick={handleAddProduct}>
+                    {editingProduct ? 'Update Product' : 'Add Product'}
+                </button>
             </form>
             <h1>All Products</h1>
             <ul>
@@ -72,6 +97,7 @@ export default function Product() {
                         <img src={product.img} alt={product.name} />
                         <div>{product.name}</div>
                         <div>Price: {product.price}</div>
+                        <button onClick={() => handleEditProduct(product)}>Edit</button>
                         <button onClick={() => handleDeleteProduct(product._id)}>Delete</button>
                     </li>
                 ))}
