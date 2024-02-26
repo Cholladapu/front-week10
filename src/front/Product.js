@@ -39,6 +39,14 @@ export default function Product() {
             .catch(error => console.error('Error adding product:', error));
     };
 
+    const handleDeleteProduct = (productId) => {
+        axios.delete(`http://localhost:5000/products/${productId}`)
+            .then(() => {
+                fetchProducts();
+            })
+            .catch(error => console.error('Error deleting product:', error));
+    };
+
     return (
         <div>
             <h2>Add New Product</h2>
@@ -64,10 +72,10 @@ export default function Product() {
                         <img src={product.img} alt={product.name} />
                         <div>{product.name}</div>
                         <div>Price: {product.price}</div>
+                        <button onClick={() => handleDeleteProduct(product._id)}>Delete</button>
                     </li>
                 ))}
             </ul>
-            
         </div>
     );
 }
