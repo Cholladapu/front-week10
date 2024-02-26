@@ -1,18 +1,45 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Product() {
     const [products, setProducts] = useState([]);
+    const [newProduct, setNewProduct] = useState({
+        img: "",
+        name: "",
+        price: ""
+    });
 
     useEffect(() => {
+        fetchProducts();
+    }, []);
+
+    const fetchProducts = () => {
         axios.get('http://localhost:5000/products')
             .then(response => setProducts(response.data.products))
             .catch(error => console.error('Error fetching products:', error));
-    }, []);
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewProduct({ ...newProduct, [name]: value });
+    };
+
+    const handleAddProduct = () => {
+        axios.post('http://localhost:5000/products', newProduct)
+            .then(() => {
+                setNewProduct({
+                    img: "",
+                    name: "",
+                    price: ""
+                });
+                fetchProducts();
+            })
+            .catch(error => console.error('Error adding product:', error));
+    };
 
     return (
         <div>
-            <h1>Products </h1>
+            <h1>All Products</h1>
             <ul>
                 {products.map(product => (
                     <li key={product._id}>
@@ -22,6 +49,20 @@ export default function Product() {
                     </li>
                 ))}
             </ul>
+            
+            <h2>Add New Product</h2>
+            <form>
+                <label>Image URL:</label>
+                <input type="text" name="img" value={newProduct.img} onChange={handleInputChange} />
+
+                <label>Name:</label>
+                <input type="text" name="name" value={newProduct.name} onChange={handleInputChange} />
+
+                <label>Price:</label>
+                <input type="text" name="price" value={newProduct.price} onChange={handleInputChange} />
+
+                <button type="button" onClick={handleAddProduct}>Add Product</button>
+            </form>
         </div>
     );
 }
