@@ -1,14 +1,5 @@
 import { useState,useEffect } from "react";
-import './Product.css';
 import axios from "axios";
-// const Item=(props)=>{
-//     return (<div>
-//         <img src={props.img} width={200} height={200}/><br/>
-//         id: {props.id}<br/>
-//         name: {props.name}<br/>
-//         Price: {props.price}<br/>
-//     </div>);
-// }
 export default function Product(){
     const [product,setProduct]=useState([])
     useEffect(()=>{
