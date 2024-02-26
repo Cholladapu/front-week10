@@ -41,17 +41,6 @@ export default function Product() {
 
     return (
         <div>
-            <h1>All Products</h1>
-            <ul>
-                {products.map(product => (
-                    <li key={product._id}>
-                        <img src={product.img} alt={product.name} />
-                        <div>{product.name}</div>
-                        <div>Price: {product.price}</div>
-                    </li>
-                ))}
-            </ul>
-            
             <h2>Add New Product</h2>
             <form>
                 <label>ID:</label>
@@ -68,6 +57,17 @@ export default function Product() {
 
                 <button type="button" onClick={handleAddProduct}>Add Product</button>
             </form>
+            <h1>All Products</h1>
+            <ul>
+                {products.map(product => (
+                    <li key={product._id}>
+                        <img src={product.img} alt={product.name} />
+                        <div>{product.name}</div>
+                        <div>Price: {product.price}</div>
+                    </li>
+                ))}
+            </ul>
+            
         </div>
     );
 }
