@@ -4,6 +4,7 @@ import axios from "axios";
 export default function Product() {
     const [products, setProducts] = useState([]);
     const [newProduct, setNewProduct] = useState({
+        _id: "",
         img: "",
         name: "",
         price: ""
@@ -28,6 +29,7 @@ export default function Product() {
         axios.post('http://localhost:5000/products', newProduct)
             .then(() => {
                 setNewProduct({
+                    _id: "",
                     img: "",
                     name: "",
                     price: ""
@@ -52,6 +54,9 @@ export default function Product() {
             
             <h2>Add New Product</h2>
             <form>
+                <label>ID:</label>
+                <input type="text" name="_id" value={newProduct._id} onChange={handleInputChange} />
+
                 <label>Image URL:</label>
                 <input type="text" name="img" value={newProduct.img} onChange={handleInputChange} />
 
