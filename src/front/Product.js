@@ -28,7 +28,6 @@ export default function Product() {
 
     const handleAddProduct = () => {
         if (editingProduct) {
-            // If editing, send a PUT request
             axios.put(`http://localhost:5000/products/${editingProduct._id}`, newProduct)
                 .then(() => {
                     setEditingProduct(null);
@@ -42,7 +41,6 @@ export default function Product() {
                 })
                 .catch(error => console.error('Error updating product:', error));
         } else {
-            // If not editing, send a POST request
             axios.post('http://localhost:5000/products', newProduct)
                 .then(() => {
                     setNewProduct({
